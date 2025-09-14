@@ -1,40 +1,78 @@
 import * as vscode from "vscode";
 
-let features: { [key: string]: any } = {};
+// Define a minimal Feature type based on what we use from web-features
+interface Feature {
+  id?: string;
+  name?: string;
+  description?: string;
+  mdn_url?: string;
+  status?: {
+    baseline?: string;
+  };
+}
+
+let features: Feature[] = [];
+
+// Manual mappings for tricky API names → Baseline feature IDs
+const apiMappings: Record<string, string> = {
+  startviewtransition: "view-transitions",
+  clipboard: "async-clipboard",
+  fetch: "abortable-fetch",
+};
 
 export async function activate(context: vscode.ExtensionContext) {
-  // Dynamically import web-features (ESM)
-  const webFeatures = await import("web-features");
-  features = webFeatures.features;
+  try {
+    // Dynamically import the ESM-only web-features package
+    const module: any = await import("web-features");
+    features = Object.values(module.features) as Feature[];
+  } catch (err) {
+    console.error("Failed to load web-features:", err);
+    return;
+  }
 
-  // Register hover provider for JavaScript and TypeScript
   const provider = vscode.languages.registerHoverProvider(
     ["javascript", "typescript", "javascriptreact", "typescriptreact"],
     {
-      provideHover(document, position) {
+      provideHover(document: vscode.TextDocument, position: vscode.Position) {
         const range = document.getWordRangeAtPosition(position);
-        if (!range) {
-          return;
+        const word = document.getText(range);
+        if (!word) return;
+
+        const wordLower = word.toLowerCase();
+        let feature: Feature | undefined;
+
+        // Check manual mapping first
+        const mappedId = apiMappings[wordLower];
+        if (mappedId) {
+          feature = features.find((f) => f.id?.toLowerCase() === mappedId);
         }
 
-        const word = document.getText(range);
-
-        // Look up the feature by key
-        const feature = features[word];
+        // If no mapped feature, fall back to fuzzy matching
+        if (!feature) {
+          feature = features.find(
+            (f) =>
+              f.name?.toLowerCase() === wordLower ||
+              f.id?.toLowerCase() === wordLower ||
+              f.description?.toLowerCase().includes(wordLower)
+          );
+        }
 
         if (feature) {
-          const baselineStatus = feature.status?.baseline
-            ? `✅ Part of Baseline (${feature.status.baseline})`
-            : "❌ Not in Baseline";
-
-          const md = new vscode.MarkdownString();
-          md.appendMarkdown(`**${feature.name}**\n\n`);
-          md.appendMarkdown(`${baselineStatus}\n\n`);
-          if (feature.mdn?.spec) {
-            md.appendMarkdown(`[MDN Docs](${feature.mdn.spec})\n`);
-          }
-
-          return new vscode.Hover(md, range);
+          const baseline = feature.status?.baseline ?? "unknown";
+          const message = new vscode.MarkdownString(
+            `**${feature.name}**  
+            Baseline: **${baseline}**  
+            ${feature.mdn_url ? `[MDN Docs](${feature.mdn_url})` : ""}`
+          );
+          message.isTrusted = true;
+          return new vscode.Hover(message);
+        } else {
+          // Fallback if not found at all
+          return new vscode.Hover(
+            new vscode.MarkdownString(
+              `ℹ️ No Baseline data found for **${word}**`
+            )
+          );
         }
       },
     }
