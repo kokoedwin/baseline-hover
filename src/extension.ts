@@ -20,6 +20,13 @@ const apiMappings: Record<string, string> = {
   fetch: "abortable-fetch",
 };
 
+// Emoji map for baseline levels
+const baselineIcons: Record<string, string> = {
+  high: "✅",
+  low: "⚠️",
+  unknown: "❌",
+};
+
 export async function activate(context: vscode.ExtensionContext) {
   try {
     // Dynamically import the ESM-only web-features package
@@ -59,9 +66,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
         if (feature) {
           const baseline = feature.status?.baseline ?? "unknown";
+          const icon = baselineIcons[baseline] ?? "❌";
+
           const message = new vscode.MarkdownString(
             `**${feature.name}**  
-            Baseline: **${baseline}**  
+            Baseline: ${icon} **${baseline}**  
             ${feature.mdn_url ? `[MDN Docs](${feature.mdn_url})` : ""}`
           );
           message.isTrusted = true;
