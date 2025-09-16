@@ -8,6 +8,7 @@ interface Feature {
   mdn_url?: string;
   status?: {
     baseline?: string;
+    support?: Record<string, string | boolean>; // new: browser support
   };
 }
 
@@ -27,6 +28,13 @@ const baselineIcons: Record<string, string> = {
   unknown: "❌",
 };
 
+// Emoji map for browser support
+const supportIcons: Record<string, string> = {
+  yes: "✅",
+  no: "❌",
+  partial: "⚠️",
+};
+
 export async function activate(context: vscode.ExtensionContext) {
   try {
     // Dynamically import the ESM-only web-features package
@@ -43,7 +51,7 @@ export async function activate(context: vscode.ExtensionContext) {
       provideHover(document: vscode.TextDocument, position: vscode.Position) {
         const range = document.getWordRangeAtPosition(position);
         const word = document.getText(range);
-        if (!word) return;
+        if (!word) {return;}
 
         const wordLower = word.toLowerCase();
         let feature: Feature | undefined;
@@ -66,12 +74,47 @@ export async function activate(context: vscode.ExtensionContext) {
 
         if (feature) {
           const baseline = feature.status?.baseline ?? "unknown";
-          const icon = baselineIcons[baseline] ?? "❌";
+          const baselineIcon = baselineIcons[baseline] ?? "❌";
+
+          // Format browser support
+          const support = feature.status?.support ?? {};
+          const browserMap: Record<string, string> = {
+            chrome: "Chrome",
+            firefox: "Firefox",
+            safari: "Safari",
+            edge: "Edge",
+          };
+
+          const supportLines: string[] = [];
+          for (const [browser, label] of Object.entries(browserMap)) {
+            const supportValue = support[browser];
+            if (typeof supportValue === "string") {
+              // Example: "111", "17.4", etc.
+              supportLines.push(
+                `- ${supportIcons.yes} ${label} ${supportValue}+`
+              );
+            } else if (supportValue === true) {
+              supportLines.push(`- ${supportIcons.yes} ${label}`);
+            } else if (supportValue === false) {
+              supportLines.push(`- ${supportIcons.no} ${label}`);
+            } else {
+              supportLines.push(`- ${supportIcons.partial} ${label}`);
+            }
+          }
 
           const message = new vscode.MarkdownString(
             `**${feature.name}**  
-            Baseline: ${icon} **${baseline}**  
-            ${feature.mdn_url ? `[MDN Docs](${feature.mdn_url})` : ""}`
+Baseline: ${baselineIcon} **${baseline}**  
+
+📖 ${feature.description ?? ""}  
+
+🌐 Support:  
+${supportLines.join("\n")}  
+
+${feature.mdn_url ? `[MDN Docs](${feature.mdn_url})` : ""}  
+[Can I Use?](https://caniuse.com/?search=${encodeURIComponent(
+              feature.name ?? feature.id ?? ""
+            )})`
           );
           message.isTrusted = true;
           return new vscode.Hover(message);
