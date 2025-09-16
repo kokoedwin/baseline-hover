@@ -72,9 +72,17 @@ export async function activate(context: vscode.ExtensionContext) {
           );
         }
 
+        const baselineLabels: Record<string, string> = {
+          high: "Baseline Widely available",
+          low: "Baseline Newly available",
+          false: "Limited availability",
+          unknown: "Unknown status",
+        };
+
         if (feature) {
           const baseline = feature.status?.baseline ?? "unknown";
           const baselineIcon = baselineIcons[baseline] ?? "❌";
+          const baselineLabel = baselineLabels[baseline] ?? baseline;
 
           // Format browser support
           const support = feature.status?.support ?? {};
@@ -104,7 +112,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
           const message = new vscode.MarkdownString(
             `**${feature.name}**  
-Baseline: ${baselineIcon} **${baseline}**  
+Baseline: ${baselineIcon} **${baselineLabel}**  
 
 📖 ${feature.description ?? ""}  
 
