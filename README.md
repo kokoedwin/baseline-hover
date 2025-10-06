@@ -1,71 +1,108 @@
-# baseline-hover README
+# 🧭 Baseline Hover — VS Code Extension
 
-This is the README for your extension "baseline-hover". After writing up a brief description, we recommend including the following sections.
+Instant web compatibility insights — right where you code.  
+Baseline Hover integrates Baseline data directly into VS Code, showing you the support status and adoption timeline of modern web APIs at a glance.
 
-## Features
+## ✨ Features
+- **🧠 Smart Hovers**: Hover any web API (like `fetch`, `navigator.clipboard`, or `startViewTransition`) to see:  
+  - Baseline status — ✅ Widely available / ⚠️ Newly available / ❌ Limited availability  
+  - Browser support (Chrome, Firefox, Safari, Edge)  
+  - MDN and Can I Use references  
+- **⚡ Zero Context Switching**: Stay focused — no need to open docs or compatibility tables.  
+- **🧩 Powered by Official Baseline Data**: Uses the `web-features` npm package maintained by the Chrome team.  
+- **💡 Works Out-of-the-Box**: Instantly functional for JavaScript and TypeScript.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## 🧰 Built With
 
-For example if there is an image subfolder under your extension project workspace:
+| Technology              | Purpose                  |
+|-------------------------|--------------------------|
+| VS Code API            | Extension framework      |
+| TypeScript             | Language for static typing |
+| web-features           | Baseline dataset         |
+| Node.js                | Development runtime      |
+| MDN browser-compat-data| Browser support info     |
 
-\!\[feature X\]\(images/feature-x.png\)
+## 🚀 Getting Started
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### 1️⃣ Prerequisites
+Make sure you have the following installed:  
+- Node.js 18+  
+- VS Code  
+- Git  
 
-## Requirements
+### 2️⃣ Clone the repository
+git clone https://github.com/YOUR_USERNAME/baseline-hover.git
+cd baseline-hover
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+### 3️⃣ Install dependencies
 
-## Extension Settings
+npm install
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### 4️⃣ Run the extension
+- Open the folder in VS Code  
+- Press `F5` or select “Run Extension” in the Debug panel  
+- A new Extension Development Host window will open  
 
-For example:
+### 5️⃣ Try it out
+Create a new `.js` or `.ts` file and hover over modern APIs like:  
+```javascript
+fetch("https://example.com");
+navigator.clipboard.writeText("Hello!");
+document.startViewTransition(() => console.log("Testing"));
 
-This extension contributes the following settings:
+You’ll instantly see their Baseline status, support info, and MDN links.
+🧪 Example Hover Output
+Abortable fetch
+Baseline: ✅ high (Baseline Widely available)
+📅 Added to Baseline: 2024-06
+📖 If you construct a fetch request with an AbortSignal, you can cancel the request.
+🌐 Support:
+✅ Chrome 66+
+✅ Firefox 57+
+✅ Safari 12.1+
+✅ Edge 16+
+MDN Docs
+Can I Use?
+🧩 How It Works
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* Maps API names (like fetch, navigator.clipboard) to their Baseline feature IDs.
+* Fetches metadata from the web-features dataset:
 
-## Known Issues
+Baseline level (false, low, high)
+Added-to-Baseline date (e.g., 2024-06)
+Browser version support
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
 
-## Release Notes
+* Displays results in a hover popup within the editor.
 
-Users appreciate release notes as you update your extension.
+🧠 Motivation
+When developing for the web, I was constantly switching between MDN, Can I Use, and spec docs just to see if a feature was safe to use.
+That friction inspired me to build Baseline Hover, so developers could stay in flow while still writing compatible, future-proof code.
+🏆 Hackathon Entry — Baseline Tooling Hackathon
+This project was created for the Baseline Tooling Hackathon, to showcase how Baseline can empower developers directly in their workflows — helping everyone write safer, more modern web code.
+💡 Future Enhancements
 
-### 1.0.0
+* 🩵 Publish on the VS Code Marketplace
+* 💬 Add inline diagnostics (e.g., “This feature is not baseline yet”)
+* 🧩 Add fallback or polyfill recommendations
+* 📈 Integrate with CI or GitHub Actions for compatibility checks
 
-Initial release of ...
+🧑‍💻 Author
+[Your Name]
+Created for the Baseline Tooling Hackathon 🧠
+GitHub: @YourUsername
+Twitter: @YourHandle
+🪪 License
+This project is licensed under the MIT License.
+🤝 Contributing
+Contributions are welcome!
+If you'd like to enhance Baseline Hover or improve its accuracy:
 
-### 1.0.1
+* Fork the repo
+* Create a feature branch (git checkout -b feature/awesome-idea)
+* Commit your changes (git commit -m "Add new feature")
+* Push to the branch (git push origin feature/awesome-idea)
+* Open a Pull Request 🚀
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+⭐ Support
+If you found this project useful, please give it a ⭐ on GitHub!
