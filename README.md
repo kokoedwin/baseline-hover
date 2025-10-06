@@ -52,12 +52,12 @@ Create a new `.js` or `.ts` file and hover over modern APIs like:
 fetch("https://example.com");
 navigator.clipboard.writeText("Hello!");
 document.startViewTransition(() => console.log("Testing"));
+```
 
 You’ll instantly see their Baseline status, support info, and MDN links.
 🧪 Example Hover Output
 Abortable fetch
 Baseline: ✅ high (Baseline Widely available)
-📅 Added to Baseline: 2024-06
 📖 If you construct a fetch request with an AbortSignal, you can cancel the request.
 🌐 Support:
 ✅ Chrome 66+
@@ -72,7 +72,6 @@ Can I Use?
 * Fetches metadata from the web-features dataset:
 
 Baseline level (false, low, high)
-Added-to-Baseline date (e.g., 2024-06)
 Browser version support
 
 
@@ -81,8 +80,10 @@ Browser version support
 🧠 Motivation
 When developing for the web, I was constantly switching between MDN, Can I Use, and spec docs just to see if a feature was safe to use.
 That friction inspired me to build Baseline Hover, so developers could stay in flow while still writing compatible, future-proof code.
+
 🏆 Hackathon Entry — Baseline Tooling Hackathon
 This project was created for the Baseline Tooling Hackathon, to showcase how Baseline can empower developers directly in their workflows — helping everyone write safer, more modern web code.
+
 💡 Future Enhancements
 
 * 🩵 Publish on the VS Code Marketplace
@@ -94,6 +95,7 @@ This project was created for the Baseline Tooling Hackathon, to showcase how Bas
 Jonathan Edwin
 Created for the Baseline Tooling Hackathon 🧠
 GitHub: @kokoedwin
+
 🪪 License
 This project is licensed under the MIT License.
 
