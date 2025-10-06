@@ -31,12 +31,15 @@ Make sure you have the following installed:
 - Git  
 
 ### 2️⃣ Clone the repository
+```bash
 git clone https://github.com/YOUR_USERNAME/baseline-hover.git
 cd baseline-hover
+```
 
 ### 3️⃣ Install dependencies
-
+```bash
 npm install
+```
 
 ### 4️⃣ Run the extension
 - Open the folder in VS Code  
@@ -88,12 +91,12 @@ This project was created for the Baseline Tooling Hackathon, to showcase how Bas
 * 📈 Integrate with CI or GitHub Actions for compatibility checks
 
 🧑‍💻 Author
-[Your Name]
+Jonathan Edwin
 Created for the Baseline Tooling Hackathon 🧠
-GitHub: @YourUsername
-Twitter: @YourHandle
+GitHub: @kokoedwin
 🪪 License
 This project is licensed under the MIT License.
+
 🤝 Contributing
 Contributions are welcome!
 If you'd like to enhance Baseline Hover or improve its accuracy:
